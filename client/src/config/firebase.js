@@ -2,12 +2,12 @@ import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || 'AIzaSyDemoDummyKeyForSreyasCampus2026',
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || 'sreyas-lost-found.firebaseapp.com',
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || 'sreyas-lost-found',
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || 'sreyas-lost-found.appspot.com',
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '123456789012',
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || '1:123456789012:web:abcdef123456',
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || 'AIzaSyD0ImqlRAMhEcCYXU8Rkz5w7AwXUCSgwGo',
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || 'sreyas-campusconnect.firebaseapp.com',
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || 'sreyas-campusconnect',
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || 'sreyas-campusconnect.firebasestorage.app',
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '1026460032680',
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || '1:1026460032680:web:863ed3c6e21c5db7b92c9d',
 };
 
 // Initialize Firebase safely
@@ -22,10 +22,7 @@ googleProvider.setCustomParameters({
 });
 
 export const isFirebaseConfigured = () => {
-  return (
-    import.meta.env.VITE_FIREBASE_API_KEY &&
-    import.meta.env.VITE_FIREBASE_API_KEY !== 'AIzaSyDemoDummyKeyForSreyasCampus2026'
-  );
+  return true;
 };
 
 export { app, auth, googleProvider };

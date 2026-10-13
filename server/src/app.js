@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const path = require('path');
+const fs = require('fs');
 
 // Route imports
 const authRoutes = require('./routes/authRoutes');
@@ -72,6 +73,18 @@ app.use('/api/*', (req, res) => {
     message: `API endpoint '${req.originalUrl}' not found.`,
   });
 });
+
+// Serve frontend static build in production (Render unified deployment)
+const clientDistPath = path.join(__dirname, '../../client/dist');
+if (fs.existsSync(clientDistPath)) {
+  app.use(express.static(clientDistPath));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api') || req.path.startsWith('/uploads') || req.path.startsWith('/health')) {
+      return next();
+    }
+    res.sendFile(path.join(clientDistPath, 'index.html'));
+  });
+}
 
 // Centralized Error Handling Middleware
 app.use((err, req, res, next) => {
