@@ -52,7 +52,10 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 // Serve uploaded images statically
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+const uploadStaticDir = process.env.VERCEL
+  ? path.join('/tmp', 'uploads')
+  : path.join(__dirname, '../uploads');
+app.use('/uploads', express.static(uploadStaticDir));
 
 // Mount API Routes
 app.use('/api/auth', authRoutes);
