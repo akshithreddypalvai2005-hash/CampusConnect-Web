@@ -51,6 +51,24 @@ if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('dev'));
 }
 
+// Ensure DB connection is established for incoming API calls (essential for Vercel)
+const { connectDB } = require('./config/db');
+app.use(async (req, res, next) => {
+  if (req.path.startsWith('/api') || req.path === '/health') {
+    try {
+      await connectDB();
+    } catch (err) {
+      console.error('[DB Middleware Error]:', err.message);
+      return res.status(500).json({
+        success: false,
+        message: 'Database connection failed. Please ensure MONGODB_URI is properly configured in Vercel Project Settings > Environment Variables.',
+        error: err.message,
+      });
+    }
+  }
+  next();
+});
+
 // Serve uploaded images statically
 const uploadStaticDir = process.env.VERCEL
   ? path.join('/tmp', 'uploads')
