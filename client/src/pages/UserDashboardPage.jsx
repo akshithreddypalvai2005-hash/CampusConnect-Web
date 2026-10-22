@@ -49,7 +49,7 @@ const UserDashboardPage = () => {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      const [profileRes, lostRes, foundRes, claimsRes, savedRes] = await Promise.all([
+      const results = await Promise.allSettled([
         api.get('/users/me'),
         api.get('/users/my-reports?reportType=lost'),
         api.get('/users/my-reports?reportType=found'),
@@ -57,17 +57,28 @@ const UserDashboardPage = () => {
         api.get('/users/saved-items'),
       ]);
 
-      if (profileRes.data.success) {
-        setProfileData(profileRes.data);
-        setEditName(profileRes.data.user.name);
-        setEditPhone(profileRes.data.user.phone || '');
-        setEditDept(profileRes.data.user.department);
-        setEditYear(profileRes.data.user.yearOfStudy);
+      const [profileRes, lostRes, foundRes, claimsRes, savedRes] = results;
+
+      if (profileRes.status === 'fulfilled' && profileRes.value.data.success) {
+        const data = profileRes.value.data;
+        setProfileData(data);
+        setEditName(data.user.name);
+        setEditPhone(data.user.phone || '');
+        setEditDept(data.user.department);
+        setEditYear(data.user.yearOfStudy);
       }
-      if (lostRes.data.success) setLostReports(lostRes.data.items);
-      if (foundRes.data.success) setFoundReports(foundRes.data.items);
-      if (claimsRes.data.success) setMyClaims(claimsRes.data.claims);
-      if (savedRes.data.success) setSavedItems(savedRes.data.items);
+      if (lostRes.status === 'fulfilled' && lostRes.value.data.success) {
+        setLostReports(lostRes.value.data.items);
+      }
+      if (foundRes.status === 'fulfilled' && foundRes.value.data.success) {
+        setFoundReports(foundRes.value.data.items);
+      }
+      if (claimsRes.status === 'fulfilled' && claimsRes.value.data.success) {
+        setMyClaims(claimsRes.value.data.claims);
+      }
+      if (savedRes.status === 'fulfilled' && savedRes.value.data.success) {
+        setSavedItems(savedRes.value.data.items);
+      }
     } catch (err) {
       console.error('Error fetching dashboard:', err);
     } finally {

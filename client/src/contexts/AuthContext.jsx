@@ -22,6 +22,7 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       setUser(null);
       setUnreadCount(0);
+      localStorage.removeItem('cc_token');
     } finally {
       setLoading(false);
     }
@@ -66,6 +67,9 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (res.data.success) {
+        if (res.data.token) {
+          localStorage.setItem('cc_token', res.data.token);
+        }
         setUser(res.data.user);
         toast.success(`Welcome, ${res.data.user.name} (${res.data.user.studentId})!`);
         checkAuth();
@@ -105,6 +109,9 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (res.data.success) {
+        if (res.data.token) {
+          localStorage.setItem('cc_token', res.data.token);
+        }
         setUser(res.data.user);
         toast.success(`Successfully logged in as Sreyas Student: ${cleanRoll.toUpperCase()} (${email})`);
         checkAuth();
@@ -120,6 +127,9 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await api.post('/auth/login', { email, password });
       if (res.data.success) {
+        if (res.data.token) {
+          localStorage.setItem('cc_token', res.data.token);
+        }
         setUser(res.data.user);
         toast.success(res.data.message || 'Login successful!');
         checkAuth();
@@ -135,6 +145,9 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await api.post('/auth/register', userData);
       if (res.data.success) {
+        if (res.data.token) {
+          localStorage.setItem('cc_token', res.data.token);
+        }
         setUser(res.data.user);
         toast.success(res.data.message || 'Registration successful!');
         checkAuth();
@@ -149,10 +162,11 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await signOut(auth).catch(() => {});
-      await api.post('/auth/logout');
+      await api.post('/auth/logout').catch(() => {});
     } catch (err) {
       // Clear state regardless
     } finally {
+      localStorage.removeItem('cc_token');
       setUser(null);
       setUnreadCount(0);
       toast.info('You have been logged out.');

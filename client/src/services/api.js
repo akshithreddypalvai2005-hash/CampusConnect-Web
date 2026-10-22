@@ -8,6 +8,15 @@ const api = axios.create({
   },
 });
 
+// Attach Authorization Bearer token from localStorage for rock-solid mobile & cross-origin auth
+api.interceptors.request.use((config) => {
+  const token = typeof window !== 'undefined' ? localStorage.getItem('cc_token') : null;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 // Response interceptor for consistent error extraction
 api.interceptors.response.use(
   (response) => response,
