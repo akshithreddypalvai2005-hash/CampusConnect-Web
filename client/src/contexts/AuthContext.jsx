@@ -78,7 +78,8 @@ export const AuthProvider = ({ children }) => {
         toast.error('Firebase Web API key not configured yet in client/.env. Check instructions or use the Sreyas Roll Number tester.');
         return { success: false, error: 'FIREBASE_NOT_CONFIGURED', err };
       } else if (err.code === 'auth/unauthorized-domain') {
-        toast.error('Domain not authorized in Firebase Console. Add "localhost" under Authentication > Settings > Authorized Domains.');
+        const domain = typeof window !== 'undefined' ? window.location.hostname : 'this domain';
+        toast.error(`Domain "${domain}" is not authorized in Firebase Console. Add it under Firebase Console > Authentication > Settings > Authorized Domains.`);
         return { success: false, error: 'UNAUTHORIZED_DOMAIN', err };
       } else {
         toast.error(err.message || 'Google sign-in failed.');
