@@ -253,7 +253,7 @@ const LoginPage = () => {
             <input
               type="text"
               className="form-input"
-              placeholder="e.g. Akshit or Rahul"
+              placeholder="Enter your name (optional)"
               value={studentNameInput}
               onChange={(e) => setStudentNameInput(e.target.value)}
             />
@@ -308,7 +308,7 @@ const LoginPage = () => {
           <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
             <button
               type="button"
-              onClick={() => fillSampleSreyas('21VE1A0521', 'Akshit')}
+              onClick={() => fillSampleSreyas('21VE1A0521', '')}
               className="btn btn-secondary btn-sm"
               style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
             >
@@ -316,7 +316,7 @@ const LoginPage = () => {
             </button>
             <button
               type="button"
-              onClick={() => fillSampleSreyas('22241A0501', 'Rahul')}
+              onClick={() => fillSampleSreyas('22241A0501', '')}
               className="btn btn-secondary btn-sm"
               style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
             >
@@ -324,7 +324,7 @@ const LoginPage = () => {
             </button>
             <button
               type="button"
-              onClick={() => fillSampleSreyas('23VE1A0412', 'Priya')}
+              onClick={() => fillSampleSreyas('23VE1A0412', '')}
               className="btn btn-secondary btn-sm"
               style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
             >

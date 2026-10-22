@@ -124,7 +124,7 @@ const RegisterPage = () => {
                 type="text"
                 name="name"
                 className="form-input"
-                placeholder="e.g. Rahul Sharma"
+                placeholder="e.g. Student Full Name"
                 value={formData.name}
                 onChange={handleChange}
                 required
