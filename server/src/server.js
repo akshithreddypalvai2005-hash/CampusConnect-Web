@@ -11,18 +11,20 @@ let server;
 async function startServer() {
   try {
     await connectDB();
-
-    server = app.listen(PORT, () => {
-      console.log(`====================================================`);
-      console.log(`🚀 CampusConnect Backend Server running on port ${PORT}`);
-      console.log(`📡 Base API URL: http://localhost:${PORT}/api`);
-      console.log(`🌐 Health check: http://localhost:${PORT}/api/health`);
-      console.log(`====================================================`);
-    });
   } catch (err) {
-    console.error('Fatal error starting CampusConnect server:', err);
-    process.exit(1);
+    console.error('[CampusConnect Server] DB connection notice:', err.message);
+    if (!process.env.VERCEL) {
+      process.exit(1);
+    }
   }
+
+  server = app.listen(PORT, () => {
+    console.log(`====================================================`);
+    console.log(`🚀 CampusConnect Backend Server running on port ${PORT}`);
+    console.log(`📡 Base API URL: http://localhost:${PORT}/api`);
+    console.log(`🌐 Health check: http://localhost:${PORT}/api/health`);
+    console.log(`====================================================`);
+  });
 }
 
 // Graceful termination handling
