@@ -13,6 +13,7 @@ import api from '../services/api';
 import ItemCard from '../components/common/ItemCard';
 import LoadingSkeleton from '../components/common/LoadingSkeleton';
 import EmptyState from '../components/common/EmptyState';
+import { DEFAULT_CATEGORIES, DEFAULT_LOCATIONS } from '../constants/defaults';
 
 const BrowseItemsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -29,8 +30,8 @@ const BrowseItemsPage = () => {
   // Data states
   const [items, setItems] = useState([]);
   const [pagination, setPagination] = useState({ totalPages: 1, totalCount: 0 });
-  const [categoriesList, setCategoriesList] = useState([]);
-  const [locationsList, setLocationsList] = useState([]);
+  const [categoriesList, setCategoriesList] = useState(DEFAULT_CATEGORIES);
+  const [locationsList, setLocationsList] = useState(DEFAULT_LOCATIONS);
   const [loading, setLoading] = useState(true);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
@@ -42,8 +43,12 @@ const BrowseItemsPage = () => {
           api.get('/categories'),
           api.get('/locations'),
         ]);
-        if (catRes.data.success) setCategoriesList(catRes.data.categories);
-        if (locRes.data.success) setLocationsList(locRes.data.locations);
+        if (catRes.data?.success && catRes.data.categories?.length > 0) {
+          setCategoriesList(catRes.data.categories);
+        }
+        if (locRes.data?.success && locRes.data.locations?.length > 0) {
+          setLocationsList(locRes.data.locations);
+        }
       } catch (err) {
         console.error('Failed to load filter metadata:', err);
       }

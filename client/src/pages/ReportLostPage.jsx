@@ -3,19 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import { UploadCloud, X, AlertCircle, ArrowLeft, PlusCircle } from 'lucide-react';
 import api from '../services/api';
 import { useToast } from '../contexts/ToastContext';
+import { DEFAULT_CATEGORIES, DEFAULT_LOCATIONS } from '../constants/defaults';
 
 const ReportLostPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
   const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState(DEFAULT_CATEGORIES[0].name);
   const [description, setDescription] = useState('');
-  const [approximateLocation, setApproximateLocation] = useState('');
+  const [approximateLocation, setApproximateLocation] = useState(DEFAULT_LOCATIONS[0].name);
   const [eventDate, setEventDate] = useState(new Date().toISOString().split('T')[0]);
   const [identifyingCharacteristics, setIdentifyingCharacteristics] = useState('');
-  const [categoriesList, setCategoriesList] = useState([]);
-  const [locationsList, setLocationsList] = useState([]);
+  const [categoriesList, setCategoriesList] = useState(DEFAULT_CATEGORIES);
+  const [locationsList, setLocationsList] = useState(DEFAULT_LOCATIONS);
 
   const [images, setImages] = useState([]);
   const [previews, setPreviews] = useState([]);
@@ -28,17 +29,13 @@ const ReportLostPage = () => {
           api.get('/categories'),
           api.get('/locations'),
         ]);
-        if (catRes.data.success) {
+        if (catRes.data?.success && catRes.data.categories?.length > 0) {
           setCategoriesList(catRes.data.categories);
-          if (catRes.data.categories.length > 0) {
-            setCategory(catRes.data.categories[0].name);
-          }
+          setCategory((prev) => prev || catRes.data.categories[0].name);
         }
-        if (locRes.data.success) {
+        if (locRes.data?.success && locRes.data.locations?.length > 0) {
           setLocationsList(locRes.data.locations);
-          if (locRes.data.locations.length > 0) {
-            setApproximateLocation(locRes.data.locations[0].name);
-          }
+          setApproximateLocation((prev) => prev || locRes.data.locations[0].name);
         }
       } catch (err) {
         console.error('Failed to load form metadata:', err);
