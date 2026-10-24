@@ -153,8 +153,8 @@ const ReportFoundPage = () => {
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
               >
-                {categoriesList.map((c) => (
-                  <option key={c._id} value={c.name}>
+                {(categoriesList && categoriesList.length > 0 ? categoriesList : DEFAULT_CATEGORIES).map((c) => (
+                  <option key={c._id || c.name} value={c.name}>
                     {c.name}
                   </option>
                 ))}
@@ -187,8 +187,8 @@ const ReportFoundPage = () => {
               onChange={(e) => setApproximateLocation(e.target.value)}
             />
             <datalist id="locations-found-datalist">
-              {locationsList.map((loc) => (
-                <option key={loc._id} value={loc.name} />
+              {(locationsList && locationsList.length > 0 ? locationsList : DEFAULT_LOCATIONS).map((loc) => (
+                <option key={loc._id || loc.name} value={loc.name} />
               ))}
             </datalist>
           </div>

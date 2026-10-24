@@ -241,8 +241,8 @@ const BrowseItemsPage = () => {
               }}
             >
               <option value="All">All Categories</option>
-              {categoriesList.map((c) => (
-                <option key={c._id} value={c.name}>
+              {(categoriesList && categoriesList.length > 0 ? categoriesList : DEFAULT_CATEGORIES).map((c) => (
+                <option key={c._id || c.name} value={c.name}>
                   {c.name}
                 </option>
               ))}
@@ -261,8 +261,8 @@ const BrowseItemsPage = () => {
               }}
             >
               <option value="All">All Campus Locations</option>
-              {locationsList.map((loc) => (
-                <option key={loc._id} value={loc.name}>
+              {(locationsList && locationsList.length > 0 ? locationsList : DEFAULT_LOCATIONS).map((loc) => (
+                <option key={loc._id || loc.name} value={loc.name}>
                   {loc.name}
                 </option>
               ))}
