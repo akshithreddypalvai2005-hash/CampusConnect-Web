@@ -25,8 +25,8 @@ const loginSchema = z.object({
 });
 
 const createItemSchema = z.object({
-  title: z.string().min(3, 'Title must be at least 3 characters').max(120),
-  description: z.string().min(10, 'Description must be at least 10 characters').max(2000),
+  title: z.string().min(2, 'Title must be at least 2 characters').max(120),
+  description: z.string().min(3, 'Description must be at least 3 characters').max(2000),
   category: z.string().min(1, 'Category is required'),
   reportType: z.enum(['lost', 'found']),
   approximateLocation: z.string().min(2, 'Location is required'),
@@ -37,8 +37,8 @@ const createItemSchema = z.object({
 });
 
 const updateItemSchema = z.object({
-  title: z.string().min(3).max(120).optional(),
-  description: z.string().min(10).max(2000).optional(),
+  title: z.string().min(2).max(120).optional(),
+  description: z.string().min(3).max(2000).optional(),
   category: z.string().optional(),
   approximateLocation: z.string().optional(),
   status: z.enum(['open', 'claimed', 'recovered', 'closed']).optional(),
@@ -49,7 +49,7 @@ const updateItemSchema = z.object({
 
 const claimSchema = z.object({
   itemId: z.string().min(1, 'Item ID is required'),
-  explanation: z.string().min(15, 'Please provide a detailed explanation of at least 15 characters').max(1500),
+  explanation: z.string().min(5, 'Please provide an explanation of at least 5 characters').max(1500),
   secretIdentifiers: z.string().max(1000).optional(),
   purchaseOrReceiptDetails: z.string().max(1000).optional(),
 });

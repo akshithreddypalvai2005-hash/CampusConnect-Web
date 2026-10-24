@@ -89,7 +89,11 @@ const ReportFoundPage = () => {
         navigate(`/items/${res.data.item._id}`);
       }
     } catch (err) {
-      toast.error(err.message || 'Failed to submit report.');
+      const detailedMsg =
+        err.errors && err.errors.length > 0
+          ? err.errors.map((e) => e.message).join(', ')
+          : err.message || 'Failed to submit report.';
+      toast.error(detailedMsg);
     } finally {
       setSubmitting(false);
     }
