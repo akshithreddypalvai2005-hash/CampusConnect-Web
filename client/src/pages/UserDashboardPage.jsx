@@ -59,13 +59,15 @@ const UserDashboardPage = () => {
 
       const [profileRes, lostRes, foundRes, claimsRes, savedRes] = results;
 
-      if (profileRes.status === 'fulfilled' && profileRes.value.data.success) {
+      if (profileRes.status === 'fulfilled' && profileRes.value.data?.success) {
         const data = profileRes.value.data;
         setProfileData(data);
-        setEditName(data.user.name);
-        setEditPhone(data.user.phone || '');
-        setEditDept(data.user.department);
-        setEditYear(data.user.yearOfStudy);
+        if (data.user) {
+          setEditName(data.user.name || '');
+          setEditPhone(data.user.phone || '');
+          setEditDept(data.user.department || '');
+          setEditYear(data.user.yearOfStudy || '1st Year');
+        }
       }
       if (lostRes.status === 'fulfilled' && lostRes.value.data.success) {
         setLostReports(lostRes.value.data.items);
@@ -188,21 +190,21 @@ const UserDashboardPage = () => {
               boxShadow: '0 4px 12px rgba(99, 102, 241, 0.3)',
             }}
           >
-            {user.name.charAt(0).toUpperCase()}
+            {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
-              <h1 style={{ fontSize: '1.5rem', fontWeight: 800 }}>{user.name}</h1>
+              <h1 style={{ fontSize: '1.5rem', fontWeight: 800 }}>{user?.name || 'Student'}</h1>
               <span className="badge badge-open" style={{ fontSize: '0.7rem' }}>
-                {user.studentId}
+                {user?.studentId || 'STUDENT'}
               </span>
             </div>
             <div style={{ display: 'flex', gap: '1rem', color: 'var(--text-secondary)', fontSize: '0.875rem', flexWrap: 'wrap' }}>
-              <span>{user.email}</span>
+              <span>{user?.email || ''}</span>
               <span>•</span>
-              <span>{user.department}</span>
+              <span>{user?.department || 'Student'}</span>
               <span>•</span>
-              <span>{user.yearOfStudy}</span>
+              <span>{user?.yearOfStudy || 'Undergraduate'}</span>
             </div>
           </div>
         </div>
@@ -399,12 +401,12 @@ const UserDashboardPage = () => {
                         </span>
                       </div>
                       <h3 style={{ fontSize: '1.125rem', fontWeight: 700 }}>
-                        Claim on: {claim.item ? claim.item.title : 'Item'}
+                        Claim on: {claim.item && typeof claim.item === 'object' ? claim.item.title : 'Item'}
                       </h3>
                     </div>
 
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
-                      {claim.item && (
+                      {claim.item && typeof claim.item === 'object' && claim.item._id && (
                         <Link to={`/items/${claim.item._id}`} className="btn btn-secondary btn-sm">
                           <ExternalLink size={14} />
                           <span>View Item</span>
@@ -456,9 +458,9 @@ const UserDashboardPage = () => {
       {/* 4. Saved Items */}
       {activeTab === 'saved' && (
         <div>
-          {savedItems.length > 0 ? (
+          {savedItems.filter(Boolean).length > 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              {savedItems.map((item) => (
+              {savedItems.filter(Boolean).map((item) => (
                 <div key={item._id} className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     <h3 style={{ fontSize: '1.0625rem', fontWeight: 700 }}>{item.title}</h3>
@@ -554,7 +556,7 @@ const UserDashboardPage = () => {
         message="Are you sure you want to delete this report? This action is permanent."
         isDanger={true}
         confirmText="Delete"
-        onConfirm={handleDeleteItem}
+        onConfirm={handleDeleteReport}
         onClose={() => setDeleteTargetId(null)}
       />
     </div>

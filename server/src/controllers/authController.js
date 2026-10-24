@@ -24,7 +24,9 @@ const sendTokenResponse = (user, statusCode, res, message = 'Success') => {
     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
     httpOnly: true,
     secure: isProduction,
-    sameSite: isProduction ? 'strict' : 'lax',
+    // 'none' allows the cookie to be sent cross-origin on Vercel serverless.
+    // Falls back to 'lax' for local dev.
+    sameSite: isProduction ? 'none' : 'lax',
   };
 
   res.cookie('token', token, cookieOptions);

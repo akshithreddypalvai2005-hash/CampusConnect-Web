@@ -6,6 +6,7 @@ import { AuthProvider } from './contexts/AuthContext';
 
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
+import ErrorBoundary from './components/common/ErrorBoundary';
 import ProtectedRoute from './components/routing/ProtectedRoute';
 import AdminRoute from './components/routing/AdminRoute';
 
@@ -35,7 +36,8 @@ function App() {
             <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
               <Navbar />
               <main style={{ flex: 1 }}>
-                <Routes>
+                <ErrorBoundary>
+                  <Routes>
                   <Route path="/" element={<LandingPage />} />
                   <Route path="/items" element={<BrowseItemsPage />} />
                   <Route path="/items/:id" element={<ItemDetailsPage />} />
@@ -87,7 +89,8 @@ function App() {
                   <Route path="/terms" element={<TermsPage />} />
                   <Route path="*" element={<NotFoundPage />} />
                 </Routes>
-              </main>
+              </ErrorBoundary>
+            </main>
               <Footer />
             </div>
           </BrowserRouter>
